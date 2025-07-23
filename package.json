@@ -1,0 +1,25 @@
+{
+  "name": "quiz-app-poc",
+  "version": "1.0.0",
+  "description": "Interactive Quiz Platform - React.js POC with comprehensive features",
+  "main": "client/src/index.js",
+  "scripts": {
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "start": "cd client && npm start",
+    "dev": "cd client && npm start"
+  },
+  "keywords": [
+    "quiz",
+    "react",
+    "education",
+    "frontend",
+    "poc"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
