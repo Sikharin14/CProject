@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import QuestionCard from '../Question/QuestionCard';
@@ -185,14 +185,13 @@ const QuizTaker = ({ quizId, onComplete }) => {
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [startTime] = useState(Date.now());
   const navigate = useNavigate();
 
   useEffect(() => {
     loadQuizData();
-  }, [quizId]);
+  }, [loadQuizData]);
 
-  const loadQuizData = async () => {
+  const loadQuizData = useCallback(async () => {
     try {
       setLoading(true);
       const [quizResponse, questionsResponse] = await Promise.all([
@@ -209,7 +208,7 @@ const QuizTaker = ({ quizId, onComplete }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [quizId, navigate]);
 
   const handleAnswerSelect = (answerIndex) => {
     setAnswers(prev => ({
@@ -235,7 +234,6 @@ const QuizTaker = ({ quizId, onComplete }) => {
   };
 
   const handleFinishQuiz = async () => {
-    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
     
     // Prepare answers for submission
     const submissionAnswers = questions.map((question, index) => ({

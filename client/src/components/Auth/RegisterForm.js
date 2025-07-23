@@ -481,8 +481,8 @@ const RegisterForm = () => {
           onChange={handleInputChange}
         />
         <CheckboxLabel htmlFor="agreeToTerms">
-          I agree to the <a href="#" onClick={(e) => e.preventDefault()}>Terms of Service</a> and{' '}
-          <a href="#" onClick={(e) => e.preventDefault()}>Privacy Policy</a>
+          I agree to the <button type="button" style={{background: 'none', border: 'none', color: '#2196F3', textDecoration: 'underline', cursor: 'pointer'}} onClick={(e) => e.preventDefault()}>Terms of Service</button> and{' '}
+          <button type="button" style={{background: 'none', border: 'none', color: '#2196F3', textDecoration: 'underline', cursor: 'pointer'}} onClick={(e) => e.preventDefault()}>Privacy Policy</button>
         </CheckboxLabel>
       </CheckboxGroup>
       {errors.agreeToTerms && (

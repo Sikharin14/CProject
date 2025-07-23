@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import QuizCard from './QuizCard';
 import { mockApi } from '../../utils/mockApi';
@@ -137,7 +137,7 @@ const QuizList = ({ searchQuery = '', categoryFilter = 'all', difficultyFilter =
 
   useEffect(() => {
     filterAndSortQuizzes();
-  }, [quizzes, searchTerm, category, difficulty, sortBy]);
+  }, [filterAndSortQuizzes]);
 
   const loadQuizzes = async () => {
     try {
@@ -151,7 +151,7 @@ const QuizList = ({ searchQuery = '', categoryFilter = 'all', difficultyFilter =
     }
   };
 
-  const filterAndSortQuizzes = () => {
+  const filterAndSortQuizzes = useCallback(() => {
     let filtered = [...quizzes];
 
     // Apply search filter
@@ -196,7 +196,7 @@ const QuizList = ({ searchQuery = '', categoryFilter = 'all', difficultyFilter =
     });
 
     setFilteredQuizzes(filtered);
-  };
+  }, [quizzes, searchTerm, category, difficulty, sortBy]);
 
   const getUniqueCategories = () => {
     const categories = [...new Set(quizzes.map(quiz => quiz.category))];

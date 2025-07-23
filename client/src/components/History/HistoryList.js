@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import HistoryItem from './HistoryItem';
 import { mockApi } from '../../utils/mockApi';
@@ -173,15 +173,7 @@ const HistoryList = ({ userId = 1 }) => {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
 
-  useEffect(() => {
-    loadUserHistory();
-  }, [userId]);
-
-  useEffect(() => {
-    filterAndSortAttempts();
-  }, [attempts, searchTerm, categoryFilter, sortBy]);
-
-  const loadUserHistory = async () => {
+  const loadUserHistory = useCallback(async () => {
     try {
       setLoading(true);
       const response = await mockApi.getUserAttempts(userId);
@@ -191,9 +183,17 @@ const HistoryList = ({ userId = 1 }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
-  const filterAndSortAttempts = () => {
+  useEffect(() => {
+    loadUserHistory();
+  }, [loadUserHistory]);
+
+  useEffect(() => {
+    filterAndSortAttempts();
+  }, [filterAndSortAttempts]);
+
+  const filterAndSortAttempts = useCallback(() => {
     let filtered = [...attempts];
 
     // Apply search filter
@@ -231,7 +231,7 @@ const HistoryList = ({ userId = 1 }) => {
     });
 
     setFilteredAttempts(filtered);
-  };
+  }, [attempts, searchTerm, categoryFilter, sortBy]);
 
   const getUniqueCategories = () => {
     const categories = [...new Set(attempts.map(attempt => attempt.quiz?.category).filter(Boolean))];

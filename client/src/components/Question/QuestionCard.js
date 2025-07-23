@@ -147,9 +147,6 @@ const QuestionCard = ({
     return String.fromCharCode(65 + index); // A, B, C, D...
   };
 
-  const isCorrectAnswer = (index) => {
-    return question.correctAnswer === index;
-  };
 
   const renderExplanation = () => {
     if (!showExplanation || selectedAnswer === null) return null;
