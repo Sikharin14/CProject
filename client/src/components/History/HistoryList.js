@@ -185,14 +185,6 @@ const HistoryList = ({ userId = 1 }) => {
     }
   }, [userId]);
 
-  useEffect(() => {
-    loadUserHistory();
-  }, [loadUserHistory]);
-
-  useEffect(() => {
-    filterAndSortAttempts();
-  }, [filterAndSortAttempts]);
-
   const filterAndSortAttempts = useCallback(() => {
     let filtered = [...attempts];
 
@@ -232,6 +224,14 @@ const HistoryList = ({ userId = 1 }) => {
 
     setFilteredAttempts(filtered);
   }, [attempts, searchTerm, categoryFilter, sortBy]);
+
+  useEffect(() => {
+    loadUserHistory();
+  }, [loadUserHistory]);
+
+  useEffect(() => {
+    filterAndSortAttempts();
+  }, [filterAndSortAttempts]);
 
   const getUniqueCategories = () => {
     const categories = [...new Set(attempts.map(attempt => attempt.quiz?.category).filter(Boolean))];

@@ -187,10 +187,6 @@ const QuizTaker = ({ quizId, onComplete }) => {
   const [timeLeft, setTimeLeft] = useState(0);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadQuizData();
-  }, [loadQuizData]);
-
   const loadQuizData = useCallback(async () => {
     try {
       setLoading(true);
@@ -209,6 +205,10 @@ const QuizTaker = ({ quizId, onComplete }) => {
       setLoading(false);
     }
   }, [quizId, navigate]);
+
+  useEffect(() => {
+    loadQuizData();
+  }, [loadQuizData]);
 
   const handleAnswerSelect = (answerIndex) => {
     setAnswers(prev => ({

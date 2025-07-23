@@ -131,26 +131,7 @@ const QuizList = ({ searchQuery = '', categoryFilter = 'all', difficultyFilter =
   const [difficulty, setDifficulty] = useState(difficultyFilter);
   const [sortBy, setSortBy] = useState('title');
 
-  useEffect(() => {
-    loadQuizzes();
-  }, []);
-
-  useEffect(() => {
-    filterAndSortQuizzes();
-  }, [filterAndSortQuizzes]);
-
-  const loadQuizzes = async () => {
-    try {
-      setLoading(true);
-      const response = await mockApi.getQuizzes();
-      setQuizzes(response.data);
-    } catch (error) {
-      console.error('Error loading quizzes:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Move filterAndSortQuizzes above its usage and use the full logic
   const filterAndSortQuizzes = useCallback(() => {
     let filtered = [...quizzes];
 
@@ -197,6 +178,26 @@ const QuizList = ({ searchQuery = '', categoryFilter = 'all', difficultyFilter =
 
     setFilteredQuizzes(filtered);
   }, [quizzes, searchTerm, category, difficulty, sortBy]);
+
+  useEffect(() => {
+    loadQuizzes();
+  }, []);
+
+  useEffect(() => {
+    filterAndSortQuizzes();
+  }, [filterAndSortQuizzes]);
+
+  const loadQuizzes = async () => {
+    try {
+      setLoading(true);
+      const response = await mockApi.getQuizzes();
+      setQuizzes(response.data);
+    } catch (error) {
+      console.error('Error loading quizzes:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getUniqueCategories = () => {
     const categories = [...new Set(quizzes.map(quiz => quiz.category))];
