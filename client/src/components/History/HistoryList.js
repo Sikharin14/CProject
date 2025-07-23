@@ -172,6 +172,8 @@ const HistoryList = ({ userId = 1 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const loadUserHistory = useCallback(async () => {
     try {
@@ -204,6 +206,23 @@ const HistoryList = ({ userId = 1 }) => {
       );
     }
 
+    // Apply date filter
+    if (startDate) {
+      filtered = filtered.filter(attempt => {
+        const attemptDate = new Date(attempt.completedAt);
+        return attemptDate >= new Date(startDate);
+      });
+    }
+    if (endDate) {
+      filtered = filtered.filter(attempt => {
+        const attemptDate = new Date(attempt.completedAt);
+        // Add 1 day to endDate to include the end date itself
+        const end = new Date(endDate);
+        end.setHours(23,59,59,999);
+        return attemptDate <= end;
+      });
+    }
+
     // Apply sorting
     filtered.sort((a, b) => {
       switch (sortBy) {
@@ -223,7 +242,7 @@ const HistoryList = ({ userId = 1 }) => {
     });
 
     setFilteredAttempts(filtered);
-  }, [attempts, searchTerm, categoryFilter, sortBy]);
+  }, [attempts, searchTerm, categoryFilter, sortBy, startDate, endDate]);
 
   useEffect(() => {
     loadUserHistory();
@@ -301,19 +320,16 @@ const HistoryList = ({ userId = 1 }) => {
           <StatValue>{stats.totalQuizzes}</StatValue>
           <StatLabel>Quizzes Taken</StatLabel>
         </StatCard>
-        
         <StatCard>
           <StatIcon>📊</StatIcon>
           <StatValue>{stats.averageScore}%</StatValue>
           <StatLabel>Average Score</StatLabel>
         </StatCard>
-        
         <StatCard>
           <StatIcon>🏆</StatIcon>
           <StatValue>{stats.bestScore}%</StatValue>
           <StatLabel>Best Score</StatLabel>
         </StatCard>
-        
         <StatCard>
           <StatIcon>⏱️</StatIcon>
           <StatValue>{formatTotalTime(stats.totalTime)}</StatValue>
@@ -330,7 +346,7 @@ const HistoryList = ({ userId = 1 }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          
+
           <SelectInput
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
@@ -340,7 +356,7 @@ const HistoryList = ({ userId = 1 }) => {
               <option key={category} value={category}>{category}</option>
             ))}
           </SelectInput>
-          
+
           <SortSelect
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
@@ -351,6 +367,28 @@ const HistoryList = ({ userId = 1 }) => {
             <option value="score-low">Lowest Score</option>
             <option value="title">Quiz Title</option>
           </SortSelect>
+
+          {/* Date filter controls */}
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem' }}>
+            <label>
+              Start Date:
+              <input
+                type="date"
+                value={startDate}
+                onChange={e => setStartDate(e.target.value)}
+                style={{ marginLeft: '0.5rem' }}
+              />
+            </label>
+            <label>
+              End Date:
+              <input
+                type="date"
+                value={endDate}
+                onChange={e => setEndDate(e.target.value)}
+                style={{ marginLeft: '0.5rem' }}
+              />
+            </label>
+          </div>
         </FilterControls>
       </FilterSection>
 
